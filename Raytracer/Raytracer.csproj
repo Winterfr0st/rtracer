@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>dyim.RayTracer</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Folder Include="RTMath\" />
+    <Folder Include="Shapes\" />
+    <Folder Include="Material\" />
+  </ItemGroup>
+</Project>
