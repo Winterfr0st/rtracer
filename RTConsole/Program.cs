@@ -11,10 +11,11 @@ namespace RaytracerCSharp
   {
     private static readonly Vector3 WhiteColor = new Vector3(1.0, 1.0, 1.0);
     private static readonly Vector3 SkyColor = new Vector3(0.5, 0.7, 1.0);
+    private static readonly Vector3 BlackColor = new Vector3(0, 0, 0);
 
     private static Vector3 Color(Ray3 r, HitableList world, int depth)
     {
-      HitRecord record = world.Hit(r, 0.001, 10000);
+      HitRecord record = world.Hit(r, 0.1, 10000);
       if (null != record)
       {
         if (depth < 50)
@@ -26,7 +27,9 @@ namespace RaytracerCSharp
           }
         }
 
-        return new Vector3(0, 0, 0);
+        // Either got absorbed by material or this ray refracted/reflected 50 times.
+        // Don't want to go more than 50 depth so stop here in that case.
+        return BlackColor;
       }
 
       Vector3 unitDir = r.Direction.ToUnitVector();
@@ -47,12 +50,13 @@ namespace RaytracerCSharp
       var vertical = new Vector3(0.0, 2.0, 0.0);
       var origin = new Vector3(0.0, 0.0, 0.0);
 
-      UniformSphereSampler sampler = new UniformSphereSampler();
+      Random rng = new Random();
+      UniformSphereSampler sampler = new UniformSphereSampler(rng);
 
-      IMaterial mat1 = new Lambertian(new Vector3(0.8, 0.3, 0.3), sampler);
+      IMaterial mat1 = new Lambertian(new Vector3(0.1, 0.2, 0.5), sampler);
       IMaterial mat2 = new Lambertian(new Vector3(0.8, 0.8, 0.0), sampler);
       IMaterial mat3 = new Metal(new Vector3(0.8, 0.6, 0.2), 0.3, sampler);
-      IMaterial mat4 = new Metal(new Vector3(0.8, 0.8, 0.8), 1.0, sampler);
+      IMaterial mat4 = new Dielectric(1.5, rng);
 
       List<IHitable> objects = new List<IHitable>(4);
       objects.Add(new Sphere(new Vector3(0, 0, -1), 0.5, mat1));

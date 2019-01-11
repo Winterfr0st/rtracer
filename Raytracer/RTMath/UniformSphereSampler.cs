@@ -10,6 +10,16 @@ namespace dyim.RayTracer.RTMath
       this.r = new Random();
     }
 
+    public UniformSphereSampler(Random rng)
+    {
+      this.r = rng;
+    }
+
+    public UniformSphereSampler(UniformSphereSampler other)
+    {
+      this.r = other.r;
+    }
+
     public Vector3 GenerateSample()
     {
       Vector3 p;

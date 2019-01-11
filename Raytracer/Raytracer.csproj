@@ -10,4 +10,7 @@
     <Folder Include="Shapes\" />
     <Folder Include="Material\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="RTMath\Utility.cs" />
+  </ItemGroup>
 </Project>

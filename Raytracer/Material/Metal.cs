@@ -24,7 +24,7 @@ namespace dyim.RayTracer.Material
 
     public ScatterRecord Scatter(Ray3 rIn, HitRecord record)
     {
-      Vector3 reflected = Utility.Reflect(rIn.Direction.ToUnitVector(), record.Normal);
+      Vector3 reflected = Physics.Reflect(rIn.Direction.ToUnitVector(), record.Normal);
       reflected = reflected + this.fuzz * this.sampler.GenerateSample();
 
       Ray3 scatter = new Ray3(record.Point, reflected);

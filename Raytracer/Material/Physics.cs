@@ -1,8 +1,9 @@
 ﻿using System;
+using dyim.RayTracer.RTMath;
 
-namespace dyim.RayTracer.RTMath
+namespace dyim.RayTracer.Material
 {
-  public static class Utility
+  public static class Physics
   {
     // Returns the reflection direction given the incoming vector and
     // the normalÏ
@@ -15,7 +16,7 @@ namespace dyim.RayTracer.RTMath
     // and where ni is the index of refraction of the first material and nt is the index of
     // refraction of the second material. Returns true if there is refraction and refractedDir
     // is the direction the ray is refracted.
-    public static bool Refract(Vector3 v, Vector3 normal, double ni, double nt, Vector3 refractedDir)
+    public static Vector3 Refract(Vector3 v, Vector3 normal, double ni, double nt)
     {
       double niOverNt = ni / nt;
 
@@ -24,13 +25,20 @@ namespace dyim.RayTracer.RTMath
       double descriminant = 1.0 - niOverNt * niOverNt * (1.0 - dt * dt);
       if (descriminant > 0)
       {
-        refractedDir = niOverNt * (v - normal * dt) - normal * System.Math.Sqrt(descriminant);
-        return true;
+        return niOverNt * (normalizedV - normal * dt) - normal * Math.Sqrt(descriminant);
       }
       else
       {
-        return false;
+        return null;
       }
+    }
+
+    // Approximation of real glass reflectivity made by Christophe Schlick.
+    public static double Schlick(double cosine, double refractiveIndex)
+    {
+      double r0 = (1.0 - refractiveIndex) / (1.0 + refractiveIndex);
+      r0 = r0 * r0;
+      return r0 + (1.0 - r0) * Math.Pow((1.0 - cosine), 5);
     }
   }
 }
