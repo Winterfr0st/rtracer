@@ -15,7 +15,7 @@ namespace RaytracerCSharp
 
     private static Vector3 Color(Ray3 r, HitableList world, int depth)
     {
-      HitRecord record = world.Hit(r, 0.1, 10000);
+      HitRecord record = world.Hit(r, 0.01, 10000);
       if (null != record)
       {
         if (depth < 50)
@@ -63,13 +63,15 @@ namespace RaytracerCSharp
       objects.Add(new Sphere(new Vector3(0, -100.5, -1), 100, mat2));
       objects.Add(new Sphere(new Vector3(1, 0, -1), 0.5, mat3));
       objects.Add(new Sphere(new Vector3(-1, 0, -1), 0.5, mat4));
+      objects.Add(new Sphere(new Vector3(-1, 0, -1), -0.45, mat4));
 
       HitableList world = new HitableList(objects);
       Camera camera = new Camera(
-        new Vector3(0.0, 0.0, 0.0),
-        new Vector3(-2.0, -1.0, -1.0),
-        new Vector3(4.0, 0.0, 0.0),
-        new Vector3(0.0, 2.0, 0.0));
+        new Vector3(-2, 2, 1),
+        new Vector3(0, 0, -1),
+        new Vector3(0, 1, 0),
+        90.0 * Math.PI / 180.0,
+        (double)nx / (double)ny);
 
       Random random = new Random();
       for (int j = ny - 1; j >= 0; j--)

@@ -9,6 +9,7 @@
     <Folder Include="RTMath\" />
     <Folder Include="Shapes\" />
     <Folder Include="Material\" />
+    <Folder Include="Renderer\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="RTMath\Utility.cs" />
