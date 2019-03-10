@@ -7,9 +7,9 @@ namespace dyim.RayTracer.Material
   public class Lambertian : IMaterial
   {
     private readonly Vector3 albedo;
-    private readonly UniformSphereSampler sampler;
+    private readonly UnitSphereUniformSampler sampler;
 
-    public Lambertian(Vector3 albedo, UniformSphereSampler sampler)
+    public Lambertian(Vector3 albedo, UnitSphereUniformSampler sampler)
     {
       this.albedo = albedo;
       this.sampler = sampler;

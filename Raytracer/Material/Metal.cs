@@ -8,9 +8,9 @@ namespace dyim.RayTracer.Material
   {
     private readonly Vector3 albedo;
     private readonly double fuzz;
-    private readonly UniformSphereSampler sampler;
+    private readonly UnitSphereUniformSampler sampler;
 
-    public Metal(Vector3 a, double fuzz, UniformSphereSampler sampler)
+    public Metal(Vector3 a, double fuzz, UnitSphereUniformSampler sampler)
     {
       this.albedo = a;
       this.fuzz = fuzz;

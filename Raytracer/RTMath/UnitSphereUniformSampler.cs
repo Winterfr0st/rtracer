@@ -1,21 +1,21 @@
 ﻿using System;
 namespace dyim.RayTracer.RTMath
 {
-  public class UniformSphereSampler
+  public class UnitSphereUniformSampler
   {
     private readonly Random r;
 
-    public UniformSphereSampler()
+    public UnitSphereUniformSampler()
     {
       this.r = new Random();
     }
 
-    public UniformSphereSampler(Random rng)
+    public UnitSphereUniformSampler(Random rng)
     {
       this.r = rng;
     }
 
-    public UniformSphereSampler(UniformSphereSampler other)
+    public UnitSphereUniformSampler(UnitSphereUniformSampler other)
     {
       this.r = other.r;
     }

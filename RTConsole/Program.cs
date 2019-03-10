@@ -51,11 +51,12 @@ namespace RaytracerCSharp
       var origin = new Vector3(0.0, 0.0, 0.0);
 
       Random rng = new Random();
-      UniformSphereSampler sampler = new UniformSphereSampler(rng);
+      UnitSphereUniformSampler sphereSampler = new UnitSphereUniformSampler(rng);
+      UnitCircleUniformSampler circleSampler = new UnitCircleUniformSampler(rng);
 
-      IMaterial mat1 = new Lambertian(new Vector3(0.1, 0.2, 0.5), sampler);
-      IMaterial mat2 = new Lambertian(new Vector3(0.8, 0.8, 0.0), sampler);
-      IMaterial mat3 = new Metal(new Vector3(0.8, 0.6, 0.2), 0.3, sampler);
+      IMaterial mat1 = new Lambertian(new Vector3(0.1, 0.2, 0.5), sphereSampler);
+      IMaterial mat2 = new Lambertian(new Vector3(0.8, 0.8, 0.0), sphereSampler);
+      IMaterial mat3 = new Metal(new Vector3(0.8, 0.6, 0.2), 0.3, sphereSampler);
       IMaterial mat4 = new Dielectric(1.5, rng);
 
       List<IHitable> objects = new List<IHitable>(4);
@@ -66,12 +67,17 @@ namespace RaytracerCSharp
       objects.Add(new Sphere(new Vector3(-1, 0, -1), -0.45, mat4));
 
       HitableList world = new HitableList(objects);
+      Vector3 lookFrom = new Vector3(-2, 2, 1);
+      Vector3 lookAt = new Vector3(0, 0, -1);
       Camera camera = new Camera(
-        new Vector3(-2, 2, 1),
-        new Vector3(0, 0, -1),
+        circleSampler,
+        lookFrom,
+        lookAt,
         new Vector3(0, 1, 0),
         90.0 * Math.PI / 180.0,
-        (double)nx / (double)ny);
+        (double)nx / (double)ny,
+        0.2,
+        (lookAt - lookFrom).Length());
 
       Random random = new Random();
       for (int j = ny - 1; j >= 0; j--)
