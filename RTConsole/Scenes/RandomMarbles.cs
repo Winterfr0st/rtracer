@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using dyim.RayTracer;
+using dyim.RayTracer.Color;
+using dyim.RayTracer.Image;
 using dyim.RayTracer.Material;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
@@ -15,13 +18,11 @@ namespace RaytracerCSharp
       int ny = 400;
       int ns = 100;
 
-      Console.WriteLine("P3\n{0} {1}\n255\n", nx, ny);
-
       Random rng = new Random();
       UnitCircleUniformSampler circleSampler = new UnitCircleUniformSampler(rng);
 
       HitableList world = this.GenerateWorld(rng);
-      Console.Error.WriteLine("Generated the world");
+      Console.WriteLine("Generated the world");
 
       Vector3 lookFrom = new Vector3(8, 2, 1.5);
       Vector3 lookAt = new Vector3(0, 0.0, 0);
@@ -36,32 +37,41 @@ namespace RaytracerCSharp
         (lookAt - lookFrom).Length());
 
       Random random = new Random();
-      for (int j = ny - 1; j >= 0; j--)
-      {
-        Console.Error.WriteLine($"y: {j}");
-        for (int i = 0; i < nx; i++)
-        {
-          Vector3 color = new Vector3(0, 0, 0);
 
-          for (int s = 0; s < ns; ++s)
+      // Create folder to output frames
+      if (!Directory.Exists("RandomMarbles"))
+      {
+        Directory.CreateDirectory("RandomMarbles");
+      }
+
+      Sensor sensor = new Sensor(nx, ny, new SqrtColorSpace(), RGBColor.Black);
+      int frameNum = 0;
+      for (int s = 0; s < ns; ++s)
+      {
+        for (int j = ny - 1; j >= 0; --j)
+        {
+          for (int i = 0; i < nx; i++)
           {
             double u = (i + random.NextDouble()) / nx;
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            color += Program.Color(r, world, 0);
+            Vector3 color = Program.Color(r, world, 0);
+            sensor.AddSample(i, j, new RGBColor(color[0], color[1], color[2]));
           }
-
-          color /= ns;
-          color = new Vector3(Math.Sqrt(color[0]), Math.Sqrt(color[1]), Math.Sqrt(color[2]));
-
-          int ir = (int)(255.99 * color[0]);
-          int ig = (int)(255.99 * color[1]);
-          int ib = (int)(255.99 * color[2]);
-
-          Console.WriteLine("{0} {1} {2}", ir, ig, ib);
         }
+
+        if (s % (ns / 10) == 0)
+        {
+          // Output 1 frame with current number of samples
+          sensor.WritePPMFile($"RandomMarbles\\frame_{frameNum}.ppm").Wait();
+          frameNum++;
+        }
+
+        Console.Write("\r{0}", s);
       }
+
+      sensor.WritePPMFile("RandomMarbles.ppm").Wait();
     }
 
     private HitableList GenerateWorld(Random rng)
