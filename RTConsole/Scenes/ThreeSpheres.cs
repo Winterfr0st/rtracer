@@ -22,8 +22,6 @@ namespace RaytracerCSharp
       int ny = 400;
       int ns = 100;
 
-      Console.WriteLine("P3\n{0} {1}\n255\n", nx, ny);
-
       var lowerLeftCorner = new Vector3(-2.0, -1.0, -1.0);
       var horizontal = new Vector3(4.0, 0.0, 0.0);
       var vertical = new Vector3(0.0, 2.0, 0.0);
@@ -66,7 +64,7 @@ namespace RaytracerCSharp
         Directory.CreateDirectory("ThreeSpheres");
       }
 
-      Sensor sensor = new Sensor(nx, ny, new SqrtColorSpace());
+      Sensor sensor = new Sensor(nx, ny, new SqrtColorSpace(), RGBColor.Black);
       int frameNum = 0;
       for (int s = 0; s < ns; ++s)
       {
@@ -83,13 +81,14 @@ namespace RaytracerCSharp
           }
         }
 
-
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePPMFile($"ThreeSpheres\frame_{frameNum}.ppm").Wait();
+          sensor.WritePPMFile($"ThreeSpheres\\frame_{frameNum}.ppm").Wait();
           frameNum++;
         }
+
+        Console.Write("\r{0}", s);
       }
 
       sensor.WritePPMFile("finalOutput.ppm").Wait();

@@ -20,7 +20,7 @@ namespace dyim.RayTracer.Image
               int ig = (int)(255.99 * c.G);
               int ib = (int)(255.99 * c.B);
 
-              await writer.WriteAsync($"{ir} {ig} {ib}");
+              await writer.WriteAsync($"{ir} {ig} {ib}\n");
           }
         }
       }

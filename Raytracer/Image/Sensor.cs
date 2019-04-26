@@ -11,7 +11,7 @@ namespace dyim.RayTracer.Image
 
     private readonly IColorSpace colorSpace;
 
-    public Sensor(int width, int height, IColorSpace colorSpace)
+    public Sensor(int width, int height, IColorSpace colorSpace, IColor initialValue)
     {
       this.image = new IColor[height, width];
       this.numSamplesPerPixel = new int[height, width];
@@ -21,7 +21,7 @@ namespace dyim.RayTracer.Image
         for (int x = 0; x < width; ++x)
         {
           this.numSamplesPerPixel[y, x] = 0;
-          this.image[y, x] = null;
+          this.image[y, x] = initialValue;
         }
       }
 
@@ -38,7 +38,7 @@ namespace dyim.RayTracer.Image
     {
       if (this.numSamplesPerPixel[y, x] <= 1)
       {
-        return this.image[y, x] ?? RGBColor.Black;
+        return this.image[y, x];
       }
 
       return this.image[y, x].Multiply(1.0 / this.numSamplesPerPixel[y, x]);

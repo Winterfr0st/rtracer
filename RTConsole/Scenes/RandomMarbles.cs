@@ -18,13 +18,11 @@ namespace RaytracerCSharp
       int ny = 400;
       int ns = 100;
 
-      Console.WriteLine("P3\n{0} {1}\n255\n", nx, ny);
-
       Random rng = new Random();
       UnitCircleUniformSampler circleSampler = new UnitCircleUniformSampler(rng);
 
       HitableList world = this.GenerateWorld(rng);
-      Console.Error.WriteLine("Generated the world");
+      Console.WriteLine("Generated the world");
 
       Vector3 lookFrom = new Vector3(8, 2, 1.5);
       Vector3 lookAt = new Vector3(0, 0.0, 0);
@@ -46,7 +44,7 @@ namespace RaytracerCSharp
         Directory.CreateDirectory("RandomMarbles");
       }
 
-      Sensor sensor = new Sensor(nx, ny, new SqrtColorSpace());
+      Sensor sensor = new Sensor(nx, ny, new SqrtColorSpace(), RGBColor.Black);
       int frameNum = 0;
       for (int s = 0; s < ns; ++s)
       {
@@ -63,13 +61,14 @@ namespace RaytracerCSharp
           }
         }
 
-
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePPMFile($"RandomMarbles\frame_{frameNum}.ppm").Wait();
+          sensor.WritePPMFile($"RandomMarbles\\frame_{frameNum}.ppm").Wait();
           frameNum++;
         }
+
+        Console.Write("\r{0}", s);
       }
 
       sensor.WritePPMFile("RandomMarbles.ppm").Wait();
