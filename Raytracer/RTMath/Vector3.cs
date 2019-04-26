@@ -5,18 +5,18 @@ using System;
 
 namespace dyim.RayTracer.RTMath
 {
-	public sealed class Vector3
-	{
+  public sealed class Vector3
+  {
     private readonly double e0;
     private readonly double e1;
     private readonly double e2;
 
-		public Vector3(double e0, double e1, double e2)
-		{
+    public Vector3(double e0, double e1, double e2)
+    {
       this.e0 = e0;
       this.e1 = e1;
       this.e2 = e2;
-		}
+    }
 
     public Vector3(Vector3 other)
       : this(other.e0, other.e1, other.e2)
