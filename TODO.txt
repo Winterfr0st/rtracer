@@ -1,5 +1,4 @@
 List of features to add
-3. Add sensor abstraction that gathers IColor objects. IColor can have one implementation RGB.
 4. Refactor rendering logic out of Color method and put it in an IRenderer with current
    implementation called SimpleRayTracer
 5. Add cubes, planes, and triangles
