@@ -16,7 +16,7 @@ namespace RaytracerCSharp
     {
       int nx = 800;
       int ny = 400;
-      int ns = 100;
+      int ns = 50;
 
       Random rng = new Random();
       UnitCircleUniformSampler circleSampler = new UnitCircleUniformSampler(rng);
@@ -64,14 +64,14 @@ namespace RaytracerCSharp
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePPMFile($"RandomMarbles\\frame_{frameNum}.ppm").Wait();
+          sensor.WritePNGFile($"RandomMarbles\\frame_{frameNum}.png").Wait();
           frameNum++;
         }
 
         Console.Write("\r{0}", s);
       }
 
-      sensor.WritePPMFile("RandomMarbles.ppm").Wait();
+      sensor.WritePNGFile("RandomMarbles.png").Wait();
     }
 
     private HitableList GenerateWorld(Random rng)
