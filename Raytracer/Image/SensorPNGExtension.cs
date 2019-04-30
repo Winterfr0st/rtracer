@@ -8,7 +8,7 @@ namespace dyim.RayTracer.Image
 {
   public static class SensorPNGExtension
   {
-    public static async Task WritePNGFile(this Sensor sensor, string filePath)
+    public static void WritePNGFile(this Sensor sensor, string filePath)
     {
       using (Image<Rgba32> image = new Image<Rgba32>(sensor.Width, sensor.Height))
       {

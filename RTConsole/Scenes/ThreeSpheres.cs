@@ -44,6 +44,9 @@ namespace RaytracerCSharp
       objects.Add(new Sphere(new Vector3(-1, 0, -1), 0.5, mat4));
       objects.Add(new Sphere(new Vector3(-1, 0, -1), -0.45, mat4));
 
+      IBackground bg = new SkyBackground();
+      PathTracer pathTracer = new PathTracer(bg, 50);
+
       HitableList world = new HitableList(objects);
       Vector3 lookFrom = new Vector3(-2, 2, 1);
       Vector3 lookAt = new Vector3(0, 0, -1);
@@ -77,7 +80,7 @@ namespace RaytracerCSharp
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            ILightPath path = Program.Color(r, world, 0);
+            ILightPath path = pathTracer.Render(r, world);
             sensor.AddSample(i, j, path.Calculate());
           }
         }
@@ -85,14 +88,14 @@ namespace RaytracerCSharp
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePNGFile($"ThreeSpheres\\frame_{frameNum}.png").Wait();
+          sensor.WritePNGFile($"ThreeSpheres\\frame_{frameNum}.png");
           frameNum++;
         }
 
         Console.Write("\r{0}", s);
       }
 
-      sensor.WritePNGFile("finalOutput.png").Wait();
+      sensor.WritePNGFile("finalOutput.png");
     }
   }
 }

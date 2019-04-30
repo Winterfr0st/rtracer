@@ -39,6 +39,9 @@ namespace RaytracerCSharp
 
       Random random = new Random();
 
+      IBackground bg = new SkyBackground();
+      PathTracer pathTracer = new PathTracer(bg, 50);
+
       // Create folder to output frames
       if (!Directory.Exists("RandomMarbles"))
       {
@@ -57,7 +60,7 @@ namespace RaytracerCSharp
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            ILightPath path = Program.Color(r, world, 0);
+            ILightPath path = pathTracer.Render(r, world);
             sensor.AddSample(i, j, path.Calculate());
           }
         }
@@ -65,14 +68,14 @@ namespace RaytracerCSharp
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePNGFile($"RandomMarbles\\frame_{frameNum}.png").Wait();
+          sensor.WritePNGFile($"RandomMarbles\\frame_{frameNum}.png");
           frameNum++;
         }
 
         Console.Write("\r{0}", s);
       }
 
-      sensor.WritePNGFile("RandomMarbles.png").Wait();
+      sensor.WritePNGFile("RandomMarbles.png");
     }
 
     private HitableList GenerateWorld(Random rng)
