@@ -8,18 +8,23 @@ namespace dyim.RayTracer.Renderer
 {
   public class PathtracerLightPath : ILightPath
   {
-    private ScatterRecord sr;
-    private PathtracerLightPath next;
+    private IColor color;
+    private ILightPath next;
 
-    public PathtracerLightPath(ScatterRecord scatterRecord, PathtracerLightPath next)
+    public PathtracerLightPath(IColor color, ILightPath next)
     {
       this.next = next;
-      this.sr = scatterRecord;
+      this.color = color;
     }
 
     public IColor Calculate()
     {
-      throw new NotImplementedException();
+      if (this.next != null)
+      {
+        return this.color.Multiply(this.next.Calculate());
+      }
+
+      return this.color;
     }
   }
 }

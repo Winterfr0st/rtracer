@@ -5,6 +5,7 @@ using dyim.RayTracer;
 using dyim.RayTracer.Color;
 using dyim.RayTracer.Image;
 using dyim.RayTracer.Material;
+using dyim.RayTracer.Renderer;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
 
@@ -56,8 +57,8 @@ namespace RaytracerCSharp
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            IColor color = Program.Color(r, world, 0);
-            sensor.AddSample(i, j, color);
+            ILightPath path = Program.Color(r, world, 0);
+            sensor.AddSample(i, j, path.Calculate());
           }
         }
 
