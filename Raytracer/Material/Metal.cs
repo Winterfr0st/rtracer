@@ -1,4 +1,4 @@
-﻿using System;
+﻿using dyim.RayTracer.Color;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
 
@@ -6,11 +6,11 @@ namespace dyim.RayTracer.Material
 {
   public class Metal : IMaterial
   {
-    private readonly Vector3 albedo;
+    private readonly IColor albedo;
     private readonly double fuzz;
     private readonly UnitSphereUniformSampler sampler;
 
-    public Metal(Vector3 a, double fuzz, UnitSphereUniformSampler sampler)
+    public Metal(IColor a, double fuzz, UnitSphereUniformSampler sampler)
     {
       this.albedo = a;
       this.fuzz = fuzz;

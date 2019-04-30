@@ -1,10 +1,11 @@
-﻿using dyim.RayTracer.RTMath;
+﻿using dyim.RayTracer.Color;
+using dyim.RayTracer.RTMath;
 
 namespace dyim.RayTracer.Material
 {
   public class ScatterRecord
   {
-    public ScatterRecord(Vector3 attenuation, Ray3 scatter)
+    public ScatterRecord(IColor attenuation, Ray3 scatter)
     {
       this.Attenuation = attenuation;
       this.Scatter = scatter;
@@ -15,7 +16,7 @@ namespace dyim.RayTracer.Material
     {
     }
 
-    public Vector3 Attenuation { get; }
+    public IColor Attenuation { get; }
 
     public Ray3 Scatter { get; }
   }

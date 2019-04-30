@@ -1,4 +1,5 @@
 ﻿using System;
+using dyim.RayTracer.Color;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
 
@@ -8,17 +9,17 @@ namespace dyim.RayTracer.Material
   {
     private readonly double refractiveIndex;
     private readonly Random rng;
+    private readonly IColor attenuation;
 
-    public Dielectric(double refractiveIndex, Random rng)
+    public Dielectric(double refractiveIndex, IColor attenuation, Random rng)
     {
       this.refractiveIndex = refractiveIndex;
       this.rng = rng;
+      this.attenuation = attenuation;
     }
 
     public ScatterRecord Scatter(Ray3 rIn, HitRecord record)
     {
-      Vector3 attenuation = new Vector3(1.0, 1.0, 1.0);
-
       Vector3 outwardNormal;
       double ni;
       double nt;
@@ -65,12 +66,12 @@ namespace dyim.RayTracer.Material
       {
         // Reflects
         Vector3 reflectedDir = Physics.Reflect(rIn.Direction, outwardNormal);
-        return new ScatterRecord(attenuation, new Ray3(record.Point, reflectedDir));
+        return new ScatterRecord(this.attenuation, new Ray3(record.Point, reflectedDir));
       }
       else
       {
         // Ray is refracted
-        return new ScatterRecord(attenuation, new Ray3(record.Point, refractedDir));
+        return new ScatterRecord(this.attenuation, new Ray3(record.Point, refractedDir));
       }
     }
   }

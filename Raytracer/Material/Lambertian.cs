@@ -1,4 +1,4 @@
-﻿using System;
+﻿using dyim.RayTracer.Color;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
 
@@ -6,10 +6,10 @@ namespace dyim.RayTracer.Material
 {
   public class Lambertian : IMaterial
   {
-    private readonly Vector3 albedo;
+    private readonly IColor albedo;
     private readonly UnitSphereUniformSampler sampler;
 
-    public Lambertian(Vector3 albedo, UnitSphereUniformSampler sampler)
+    public Lambertian(IColor albedo, UnitSphereUniformSampler sampler)
     {
       this.albedo = albedo;
       this.sampler = sampler;

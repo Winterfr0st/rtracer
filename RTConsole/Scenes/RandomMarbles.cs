@@ -56,8 +56,8 @@ namespace RaytracerCSharp
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            Vector3 color = Program.Color(r, world, 0);
-            sensor.AddSample(i, j, new RGBColor(color[0], color[1], color[2]));
+            IColor color = Program.Color(r, world, 0);
+            sensor.AddSample(i, j, color);
           }
         }
 
@@ -81,7 +81,7 @@ namespace RaytracerCSharp
       List<IHitable> objects = new List<IHitable>();
 
       // Add the main earth object
-      IMaterial earthMaterial = new Lambertian(new Vector3(0.5, 0.5, 0.5), sphereSampler);
+      IMaterial earthMaterial = new Lambertian(new RGBColor(0.5, 0.5, 0.5), sphereSampler);
       objects.Add(new Sphere(new Vector3(0, -1000, 0), 1000, earthMaterial));
 
       // Generate random objects
@@ -102,7 +102,7 @@ namespace RaytracerCSharp
               double blue = rng.NextDouble() * rng.NextDouble();
 
               var randomDiffuseMaterial = new Lambertian(
-                new Vector3(red, green, blue),
+                new RGBColor(red, green, blue),
                 sphereSampler);
               objects.Add(new Sphere(center, 0.2, randomDiffuseMaterial));
             }
@@ -113,21 +113,21 @@ namespace RaytracerCSharp
               double green = 0.5 * (1 + rng.NextDouble());
               double blue = 0.5 * (1 + rng.NextDouble());
               double fuzz = 0.5 * rng.NextDouble();
-              var randomMetal = new Metal(new Vector3(red, green, blue), fuzz, sphereSampler);
+              var randomMetal = new Metal(new RGBColor(red, green, blue), fuzz, sphereSampler);
               objects.Add(new Sphere(center, 0.2, randomMetal));
             }
             else
             {
               // 5% chance for dielectric
-              objects.Add(new Sphere(center, 0.2, new Dielectric(1.5, rng)));
+              objects.Add(new Sphere(center, 0.2, new Dielectric(1.5, RGBColor.White, rng)));
             }
           }
         }
       }
 
-      objects.Add(new Sphere(new Vector3(0, 1, 0), 1.0, new Dielectric(1.5, rng)));
-      objects.Add(new Sphere(new Vector3(-4, 1, 0), 1.0, new Lambertian(new Vector3(0.4, 0.2, 0.1), sphereSampler)));
-      objects.Add(new Sphere(new Vector3(4, 1, 0), 1.0, new Metal(new Vector3(0.7, 0.6, 0.5), 0.0, sphereSampler)));
+      objects.Add(new Sphere(new Vector3(0, 1, 0), 1.0, new Dielectric(1.5, RGBColor.White, rng)));
+      objects.Add(new Sphere(new Vector3(-4, 1, 0), 1.0, new Lambertian(new RGBColor(0.4, 0.2, 0.1), sphereSampler)));
+      objects.Add(new Sphere(new Vector3(4, 1, 0), 1.0, new Metal(new RGBColor(0.7, 0.6, 0.5), 0.0, sphereSampler)));
 
       return new HitableList(objects);
     }

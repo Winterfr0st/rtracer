@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using dyim.RayTracer;
+using System.Diagnostics;
+using dyim.RayTracer.Color;
 using dyim.RayTracer.Material;
 using dyim.RayTracer.RTMath;
 using dyim.RayTracer.Shapes;
@@ -9,11 +9,11 @@ namespace RaytracerCSharp
 {
   public static class Program
   {
-    private static readonly Vector3 WhiteColor = new Vector3(1.0, 1.0, 1.0);
-    private static readonly Vector3 SkyColor = new Vector3(0.5, 0.7, 1.0);
-    private static readonly Vector3 BlackColor = new Vector3(0, 0, 0);
+    private static readonly IColor WhiteColor = new RGBColor(1.0, 1.0, 1.0);
+    private static readonly IColor SkyColor = new RGBColor(0.5, 0.7, 1.0);
+    private static readonly IColor BlackColor = new RGBColor(0, 0, 0);
 
-    internal static Vector3 Color(Ray3 r, HitableList world, int depth)
+    internal static IColor Color(Ray3 r, HitableList world, int depth)
     {
       HitRecord record = world.Hit(r, 0.01, 10000);
       if (null != record)
@@ -23,7 +23,7 @@ namespace RaytracerCSharp
           ScatterRecord sr = record.Material.Scatter(r, record);
           if (null != sr)
           {
-            return sr.Attenuation * Color(sr.Scatter, world, depth + 1);
+            return sr.Attenuation.Multiply(Color(sr.Scatter, world, depth + 1));
           }
         }
 
@@ -34,13 +34,17 @@ namespace RaytracerCSharp
 
       Vector3 unitDir = r.Direction.ToUnitVector();
       double t = 0.5 * (unitDir.Y + 1.0);
-      return (1.0 - t) * WhiteColor + t * SkyColor;
+      return WhiteColor.Multiply(1.0 - t).Add(SkyColor.Multiply(t));
     }
 
     public static void Main(string[] args)
     {
-      IScene scene = new RandomMarbles();
+      Stopwatch watch = Stopwatch.StartNew();
+      IScene scene = new ThreeSpheres(); //// new RandomMarbles();
       scene.RenderScene();
+      watch.Stop();
+
+      Console.WriteLine(watch.ElapsedMilliseconds + "ms");
     }
   }
 }

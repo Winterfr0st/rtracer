@@ -31,10 +31,10 @@ namespace RaytracerCSharp
       UnitSphereUniformSampler sphereSampler = new UnitSphereUniformSampler(rng);
       UnitCircleUniformSampler circleSampler = new UnitCircleUniformSampler(rng);
 
-      IMaterial mat1 = new Lambertian(new Vector3(0.1, 0.2, 0.5), sphereSampler);
-      IMaterial mat2 = new Lambertian(new Vector3(0.8, 0.8, 0.0), sphereSampler);
-      IMaterial mat3 = new Metal(new Vector3(0.8, 0.6, 0.2), 0.3, sphereSampler);
-      IMaterial mat4 = new Dielectric(1.5, rng);
+      IMaterial mat1 = new Lambertian(new RGBColor(0.1, 0.2, 0.5), sphereSampler);
+      IMaterial mat2 = new Lambertian(new RGBColor(0.8, 0.8, 0.0), sphereSampler);
+      IMaterial mat3 = new Metal(new RGBColor(0.8, 0.6, 0.2), 0.3, sphereSampler);
+      IMaterial mat4 = new Dielectric(1.5, new RGBColor(1.0, 1.0, 1.0), rng);
 
       List<IHitable> objects = new List<IHitable>(4);
       objects.Add(new Sphere(new Vector3(0, 0, -1), 0.5, mat1));
@@ -76,22 +76,22 @@ namespace RaytracerCSharp
             double v = (j + random.NextDouble()) / ny;
 
             Ray3 r = new Ray3(camera.GetRay(u, v));
-            Vector3 color = Program.Color(r, world, 0);
-            sensor.AddSample(i, j, new RGBColor(color[0], color[1], color[2]));
+            IColor color = Program.Color(r, world, 0);
+            sensor.AddSample(i, j, color);
           }
         }
 
         if (s % (ns / 10) == 0)
         {
           // Output 1 frame with current number of samples
-          sensor.WritePPMFile($"ThreeSpheres\\frame_{frameNum}.ppm").Wait();
+          sensor.WritePNGFile($"ThreeSpheres\\frame_{frameNum}.png").Wait();
           frameNum++;
         }
 
         Console.Write("\r{0}", s);
       }
 
-      sensor.WritePPMFile("finalOutput.ppm").Wait();
+      sensor.WritePNGFile("finalOutput.png").Wait();
     }
   }
 }
